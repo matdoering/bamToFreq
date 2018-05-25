@@ -16,4 +16,4 @@ You can simply run bamToFreq via
 ```
 bamToFreq <bamFile>
 ```
-The frequency files will be automatically generated in terms of CSVs whose filenames are generated from ```<bamFile>``` by appending ```_freqs``` or ```_codonFreqs.csv```, for single-nucleotide or codon frequency files, respectively.
+Once the computations have completed, the frequency files are automatically generated in terms of CSVs whose filenames are generated from ```<bamFile>``` by appending ```_freqs.csv``` or ```_codonFreqs.csv``` for single-nucleotide or codon frequency files, respectively.
