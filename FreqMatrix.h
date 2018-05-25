@@ -228,13 +228,16 @@ public:
 	FreqMatrix(char* samPath);
 	template<typename T>
 	static void truncateMatrix(map<string, vector<T> > &freqMatrix, int minPos, int maxPos) {
-	for (typename map<string, vector<T> >::iterator it = freqMatrix.begin(); it != freqMatrix.end(); ++it) {
-		typename vector<T>::const_iterator first = it->second.begin() + minPos;
-		typename vector<T>::const_iterator last = it->second.begin() + maxPos;
-		vector<T>truncVec(first,last);
-		freqMatrix[it->first] = truncVec;
+		if (maxPos == 0) { // nothing to truncate
+			return;
+		}
+		for (typename map<string, vector<T> >::iterator it = freqMatrix.begin(); it != freqMatrix.end(); ++it) {
+			typename vector<T>::const_iterator first = it->second.begin() + minPos;
+			typename vector<T>::const_iterator last = it->second.begin() + maxPos;
+			vector<T>truncVec(first,last);
+			freqMatrix[it->first] = truncVec;
+		}
 	}
-}
 	void truncateCodonMatrix(); // remove positions that are all 0s from codon matrix
 	void truncateFreqMatrix(); // remove positions that are all 0s
 	void setCodonMatrix(); // select the correct reading frame from the generated codon distributions

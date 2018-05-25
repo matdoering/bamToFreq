@@ -13,21 +13,29 @@ int main(int argc, char *argv[]){
 	processSamFile(samPath);
     return 0;
 }
-
+int readFromSam(samFile *fp_in, bam_hdr_t *bamHdr, bam1_t *aln, char* samPath) {
+	try {
+		return sam_read1(fp_in,bamHdr,aln);
+	}
+	catch (...) {
+		std::cerr << "File '" << samPath << "' does not seem to be supported. Are you sure it's a BAM file?" << std::endl;
+		return 0;
+	}
+}
 void processSamFile(char* samPath) {
-	std::cout << "processSamFile" << std::endl;
+	std::cout << "Generating frequencies from file '" << samPath << "' ..."  << std::endl;
 	samFile *fp_in = hts_open(samPath,"r"); //open bam file
 	bam_hdr_t *bamHdr = sam_hdr_read(fp_in); //read header
-	std::cout << "before init" << std::endl;
     bam1_t *aln = bam_init1(); //initialize an alignment
 	if (fp_in == NULL || bamHdr == NULL || aln == NULL) {
 		return;
 	}
-	std::cout << "after init" << std::endl;
 	// init matrix with nucleotide counts
 	FreqMatrix *freqs = new FreqMatrix(samPath);
 	uint8_t qualCutoff = 30;
-    while(sam_read1(fp_in,bamHdr,aln) > 0){
+	int readCount = 0;
+    while(readFromSam(fp_in, bamHdr, aln, samPath) > 0){
+		readCount++;
         int32_t pos = aln->core.pos + 1; // left most position of alignment in zero based coordinate (+1)
         //char *chr = bamHdr->target_name[aln->core.tid] ; // contig name (chromosome)
         uint32_t len = aln->core.l_qseq; // length of the read.
@@ -38,27 +46,7 @@ void processSamFile(char* samPath) {
 		}
 		uint8_t* baseQuals = bam_get_qual(aln);
         uint8_t *q = bam_get_seq(aln); // read sequence
-        uint32_t *cigar = bam_get_cigar(aln); // lower 4 bits indicate cigar state, upper 28 bits give the cigar length
-		/*bam_cigar_type returns a bit flag with:
- *   bit 1 set if the cigar operation consumes the query
- *   bit 2 set if the cigar operation consumes the reference
- *
- * For reference, the unobfuscated truth table for this function is:
- * BAM_CIGAR_TYPE  QUERY  REFERENCE
- * --------------------------------
- * BAM_CMATCH      1      1
- * BAM_CINS        1      0
- * BAM_CDEL        0      1
- * BAM_CREF_SKIP   0      1
- * BAM_CSOFT_CLIP  1      0
- * BAM_CHARD_CLIP  0      0
- * BAM_CPAD        0      0
- * BAM_CEQUAL      1      1
- * BAM_CDIFF       1      1
- * BAM_CBACK       0      0
- * --------------------------------
- */
-		
+        uint32_t *cigar = bam_get_cigar(aln); // lower 4 bits indicate cigar state, upper 28 bits give the cigar length		
 		// interpret cigar string
 		vector<ReadData> matches;
 		vector<ReadData> insertions;
@@ -123,9 +111,12 @@ void processSamFile(char* samPath) {
 		//freqs->storeReadCodon(deletions); // store in the codon matrix via "---" column
 
     }
-	freqs->truncateFreqMatrix(); // truncate unnecessary rows in matrix
-    freqs->setCodonMatrix();
+	if (readCount != 0) {
+		// any reads present?
+		freqs->truncateFreqMatrix(); // truncate unnecessary rows in matrix
+		freqs->setCodonMatrix();
+		freqs->writeCSVs();
+	}
     bam_destroy1(aln);
     sam_close(fp_in);
-	freqs->writeCSVs();
 }

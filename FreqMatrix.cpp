@@ -134,7 +134,7 @@ void FreqMatrix::truncateCodonMatrix() {
 
 void FreqMatrix::writeCSVs() {
 	writeCSV(m_freqMatrix, "freqs");
-	std::cout << "single nt file successfully written" << std::endl;
+	//std::cout << "single nt file successfully written" << std::endl;
 	writeCodonCSV(m_codonMatrix->getAllData(), "codonFreqs");
 }
 
@@ -279,7 +279,7 @@ void FreqMatrix::setCodonMatrix() {
 string FreqMatrix::getConsensus(CodonData& codonData) {
 	// form majority consensus: select max prevalence per row
 	map<string, vector<int> > freqMatrix = codonData.getMatches();
-	std::cout << "getConsensus" << std::endl;
+	//std::cout << "getConsensus" << std::endl;
 	string consensus = "";
 	unordered_set<string> ignoreColumns({"pos", "other"});
 	for (size_t i = 0; i < m_defaultNumberOfRows; ++i) {

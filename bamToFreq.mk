@@ -36,12 +36,12 @@ ObjectsFileList        :="bamToFreq.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/TL/stat_learn/work/mdoering/codeliteWorkspace/bamToFreq/bamToFreq/htsliblib/include/ 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/TL/stat_learn/work/mdoering/codeliteWorkspace/bamToFreq/bamToFreq/htslib/include/ 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)hts 
 ArLibs                 :=  "libhts" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/TL/stat_learn/work/mdoering/codeliteWorkspace/bamToFreq/bamToFreq/htsliblib/lib 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/TL/stat_learn/work/mdoering/codeliteWorkspace/bamToFreq/bamToFreq/htslib/lib 
 
 ##
 ## Common variables
