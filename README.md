@@ -16,7 +16,7 @@ You can simply run bamToFreq via
 ```
 bamToFreq <bamFile>
 ```
-Note that you Of course you can also pass multiple BAM files to the program. Once the computations have completed, the frequency files are automatically generated in terms of CSVs whose filenames are generated from ```<bamFile>``` by appending ```_freqs.csv``` or ```_codonFreqs.csv``` for single-nucleotide or codon frequency files, respectively. Please see the [examples folder](examples) for an example providing input and output for a HIV-1 sample of the polymerase region. Please note that the runtime of bamToFreq largely depends on the number of reads. If high coverage is not necessary, samtools can be used to sample reads from a BAM file.
+Of course you can also pass multiple BAM files to the program. Once the computations have completed, the frequency files are automatically generated in terms of CSVs whose filenames are generated from ```<bamFile>``` by appending ```_freqs.csv``` or ```_codonFreqs.csv``` for single-nucleotide or codon frequency files, respectively. Please see the [examples folder](examples) for an example providing input and output for a HIV-1 sample of the polymerase region. Please note that the runtime of bamToFreq largely depends on the number of reads. If high coverage is not necessary, samtools can be used to sample reads from a BAM file.
 
 For an overview of available options, please use
 ```
