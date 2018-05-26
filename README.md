@@ -2,11 +2,11 @@
 bamToFreq is a tool for converting mapped reads from next-generation sequencing (NGS) in terms of a [BAM file](https://samtools.github.io/hts-specs/SAMv1.pdf) to the [frequency file format](http://doi.org/10.1093/nar/gky349). BAM files can be generated from FASTQ files using a variety of mappers such as BWA, SMALT, or Bowtie. For mapping reads and analyzing resistance of of viral such as HIV-1 from a FASTQ file, there exist freely available pipelines such as [MinVar](https://github.com/ozagordi/MinVar) or web services such as [PASeq](https://paseq.org). Other tools such as <a href = "https://ngs.geno2pheno.org">geno2pheno[ngs-freq]</a> require the input of frequency files, whose generation is facilitated by the use of bamToFreq.
 
 ## Requirements
-The only requirement of bamToFreq is [htslib](https://github.com/samtools/htslib). If htslib has not been properly setup, bamToFreq will not work and output the following error:
+The only requirements of bamToFreq are [htslib](https://github.com/samtools/htslib) and boost. For example, if htslib has not been properly setup, bamToFreq will not work and output the following error:
 ```
 error while loading shared libraries: libhts.so.2: cannot open shared object file: No such file or directory
 ```
-Therefore, please ensure that you either have installed htslib system-wide or that you have adjusted your ```LD_LIBRARY_PATH``` accordingly, for example:
+Therefore, please ensure that you either have installed the requirements system-wide or that you have adjusted your ```LD_LIBRARY_PATH``` accordingly, for example in case that htslib is installed locally:
 ```
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<pathToFolderContainingLibHts>
 ```
