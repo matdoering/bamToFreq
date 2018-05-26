@@ -41,7 +41,7 @@ IncludePCH             :=
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)hts 
 ArLibs                 :=  "libhts" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)htslib/lib 
+LibPath                := $(LibraryPathSwitch). 
 
 ##
 ## Common variables
