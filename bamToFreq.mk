@@ -39,8 +39,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)htslib/include/ 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)hts 
-ArLibs                 :=  "libhts" 
+Libs                   := $(LibrarySwitch)hts $(LibrarySwitch)boost_filesystem $(LibrarySwitch)boost_system 
+ArLibs                 :=  "libhts" "boost_filesystem" "boost_system" 
 LibPath                := $(LibraryPathSwitch). 
 
 ##

@@ -14,8 +14,10 @@ using namespace std;
 class FreqMatrix {
 	
 private:
+    string m_outFolder;
+    int m_phredQualityCutoff;
 	map<string, vector<int> > m_freqMatrix;
-	CodonData *m_codonMatrix;
+	CodonData *m_codonMatrix = NULL;
 	vector<CodonData> m_codonFrames; // matrices for 1st, 2nd, and 3rd reading frame
 	static size_t m_defaultNumberOfRows; // viral genomes are small
 	void addEvidence(int pos, string obs); // increment evidence at position 'pos' for observation 'obs'
@@ -222,10 +224,9 @@ public:
 	void storeRead(vector<ReadData> &matches);
 	void storeReadCodon(vector<ReadData> &matches);
 	void storeInsertions(vector<ReadData> &insertions);
-	void writeCSV(map<string, vector<int> > &freqMatrix, string suffix);
-	void writeCodonCSV(map<string, vector<string> > &freqMatrix, string suffix);
+	void writeCSV(map<string, vector<string> > &freqMatrix, string suffix);
 	void writeCSVs();
-	FreqMatrix(char* samPath);
+	FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder);
 	template<typename T>
 	static void truncateMatrix(map<string, vector<T> > &freqMatrix, int minPos, int maxPos) {
 		if (maxPos == 0) { // nothing to truncate
@@ -241,6 +242,7 @@ public:
 	void truncateCodonMatrix(); // remove positions that are all 0s from codon matrix
 	void truncateFreqMatrix(); // remove positions that are all 0s
 	void setCodonMatrix(); // select the correct reading frame from the generated codon distributions
+    static map<string, vector<string> > toStringMatrix(map<string, vector<int> > &freqMatrix); // stringify for csv output
 };
 
 #endif

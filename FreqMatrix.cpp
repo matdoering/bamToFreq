@@ -21,9 +21,10 @@ string FreqMatrix::translate(string ntSeq) {
 }
 
 
-FreqMatrix::FreqMatrix(char* samPath) {
-	// initialize name of input sam file for csv output later
-	m_inputFname = string(samPath);
+FreqMatrix::FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder) :  
+        m_inputFname(string(samPath)), m_phredQualityCutoff(phredQualityCutoff), m_outFolder(outFolder)
+    {
+
 	// initialize read counts with zeros
 	vector<int> readCounts(m_defaultNumberOfRows,0);
 	// initialize pos vector
@@ -134,13 +135,20 @@ void FreqMatrix::truncateCodonMatrix() {
 
 
 void FreqMatrix::writeCSVs() {
-	writeCSV(m_freqMatrix, "freqs");
-	//std::cout << "single nt file successfully written" << std::endl;
-	writeCodonCSV(m_codonMatrix->getAllData(), "codonFreqs");
+    map<string, vector<string> > singleNTs = toStringMatrix(m_freqMatrix);
+	writeCSV(singleNTs, "freqs");
+	// std::cout << "single nt file successfully written" << std::endl;
+    if (m_codonMatrix != NULL) {
+        writeCSV(m_codonMatrix->getAllData(), "codonFreqs");
+    }
 }
 
-void FreqMatrix::writeCodonCSV(map<string, vector<string> > &freqMatrix, string suffix) {
+void FreqMatrix::writeCSV(map<string, vector<string> > &freqMatrix, string suffix) {
 	// duplicate code with writeCSV: template function?
+    if (freqMatrix.size() == 0) {
+        // don't create a file
+        return;
+    }
 	std::fstream fs;
 	string outName = m_inputFname;
 	suffix = "_" + suffix + ".csv";
@@ -151,6 +159,16 @@ void FreqMatrix::writeCodonCSV(map<string, vector<string> > &freqMatrix, string 
 	} else {
 		outName = outName + suffix;
 	}
+    if (m_outFolder.size() != 0) {
+        // adjust outFolder:
+        unsigned found = outName.find_last_of("/\\");
+        if (found != string::npos) {
+            string fname = outName.substr(found + 1);
+            outName = m_outFolder + "/" + fname; // extra slash necessary here?
+        } else {
+            outName = m_outFolder + "/" + outName;
+        }
+    }
 	fs.open (outName, std::fstream::out | std::fstream::trunc);
 	// store header as vector for change of order
 	vector<string> header;
@@ -193,59 +211,20 @@ void FreqMatrix::writeCodonCSV(map<string, vector<string> > &freqMatrix, string 
 	fs.close();
 	std::cout << "Successfully stored frequencies in CSV '" << outName << "'." << std::endl;
 }
-void FreqMatrix::writeCSV(map<string, vector<int> > &freqMatrix, string suffix) {
-	std::fstream fs;
-	string outName = m_inputFname;
-	suffix = "_" + suffix + ".csv";
-	size_t pos = outName.find_last_of(".");
-	// make sure the poisition is valid
-	if (pos != string::npos) {
-		outName = outName.substr(0, pos) + suffix;
-	} else {
-		outName = outName + suffix;
-	}
-	fs.open (outName, std::fstream::out | std::fstream::trunc);
-	// store header as vector for change of order
-	vector<string> header;
-	for (map<string, vector<int> >::iterator it = freqMatrix.begin(); it != freqMatrix.end(); ++it) {
-		string headerEntry = it->first;
-		header.push_back(headerEntry);
-	}
 
-	// add data
-	if (freqMatrix.find("pos") == freqMatrix.end()) {
-		// matrix wasn't initialized correctly
-		std::cout << "Not storing CSV '" << outName << "' because matrix wasn't initialized correctly." << std::endl;
-		return;
-	}
-	// rearrange header: pos should be first
-	header.erase(std::find(header.begin(), header.end(), "pos"));
-	header.insert(header.begin(), "pos");
-	// write out header:
-	for (size_t i = 0; i < header.size(); ++i) {
-		string headerEntry = header[i];
-		if (i != header.size() - 1) {
-			fs << headerEntry << ",";
-		} else {
-			fs << headerEntry << std::endl;
-		}
-	}
-	size_t nbrRows = freqMatrix.at("pos").size();
-	for (size_t i = 0; i < nbrRows; ++i) {
-		// std::cout << "Pos: " << i << std::endl;
-		for (size_t j = 0; j < header.size(); ++j) {
-			string column = header[j];
-			int val = freqMatrix.at(column).at(i);
-			if (j != header.size() - 1) {
-				fs << to_string(val) << ",";
-			} else {
-				fs << to_string(val) << std::endl;
-			}
-		}
-	}
-	fs.close();
-	std::cout << "Successfully stored frequencies in CSV '" << outName << "'." << std::endl;
+map<string, vector<string> > FreqMatrix::toStringMatrix(map<string, vector<int> > &freqMatrix) {
+    map<string, vector<string> > newMatrix;
+    for (map<string, vector<int> >::iterator it = freqMatrix.begin(); it != freqMatrix.end(); ++it) {
+        vector<string> newVec;
+        for (size_t i = 0; i < it->second.size(); ++i) {
+            newVec.push_back(to_string(it->second[i]));
+        }
+        newMatrix[it->first] = newVec;
+    }
+    return newMatrix;
 }
+
+
 void FreqMatrix::storeRead(vector<ReadData> &matches) {
 	//std::cout << "Storing read at pos " << pos << ": " << seq << std::endl;
 	// iterate through read and store values
@@ -260,7 +239,7 @@ void FreqMatrix::storeRead(vector<ReadData> &matches) {
 		string obs = matches.at(i).getNt();
 		idx = matches.at(i).getRefPos();
 		int phredQual = matches.at(i).getQuality();
-		if (phredQual >= 30) {
+		if (phredQual >= m_phredQualityCutoff) {
 			addEvidence(idx, obs);
 		}
 	}
@@ -367,7 +346,7 @@ map<int, vector<string> > FreqMatrix::getCodons(vector<ReadData> &matches, int r
 		// check qualities
 		bool qualOK = true;
 		for (int qual: phredQuals) {
-			if (qual < 30) {
+			if (qual < m_phredQualityCutoff) {
 				qualOK = false;
 			}
 		}
@@ -416,50 +395,3 @@ void FreqMatrix::storeReadCodon(vector<ReadData> &matches) {
 		}
 	}
 }
-
-/*
-void FreqMatrix::storeReadCodon(vector<string> &seq, vector<int>& pos, vector<int> &baseQuals) {
-	//std::cout << "Storing read at pos " << pos << ": " << seq << std::endl;
-	// iterate through read and store values
-	
-	// TODO: truncation pair for codon freq should be different due to storing insertions in the file!
-	if (pos.size() == 0) { // nothing to store
-		return;
-	}
-	vector<string> codons = {"", "", ""};
-	int lastCodonPos = pos[0];
-	for (size_t i = 0; i < seq.size(); ++i) {
-		string obs = seq.at(i);
-		int curPos = pos[i];
-		int phredQual = baseQuals.at(i);
-		if (phredQual >= 30) {
-			//addEvidence(idx, obs);
-			for (size_t j = 0; j < codons.size(); ++j) {
-				if (codons[j].length() == 0) {
-					// start a new codon if current pos fits the reading frame j
-					int readingFrame = (curPos - 1) % 3;
-					if (readingFrame == j) { // correct reading frame for current position in the reference
-						codons[j] = obs;
-					}
-				} else if (codons[j].length() != 0 && curPos - lastCodonPos == 1) { // ensure that bases are consecutive
-					// extend the current codon
-					codons[j] = codons[j] + obs;
-				} else if (codons[j].length() != 0 && curPos - lastCodonPos != 1) {
-					// reset codon
-					codons[j] = ""; 
-				}
-				if (codons[j].length() == 3) { // codon was constructed
-					// store codon evidence
-					int codonPos = ((curPos - 1) / 3) + 1;
-					//std::cout << "codon " << codons[j] << " at pos "<< codonPos << was constructed!" << std::endl;
-					addEvidenceCodon(codonPos, codons[j], j);
-					// clear codon
-					codons[j] = "";
-				}
-			}
-			lastCodonPos = curPos;
-		}
-		// std::cout << "codon 0: " << codons[0] << std::endl;
-	}
-}
-*/

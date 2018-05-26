@@ -8,7 +8,7 @@ error while loading shared libraries: libhts.so.2: cannot open shared object fil
 ```
 Therefore, please ensure that you either have installed htslib system-wide or that you have adjusted your ```LD_LIBRARY_PATH``` accordingly, for example:
 ```
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<pathToBamToFreq>/htslib/lib/
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<pathToFolderContainingLibHts>
 ```
 
 ## Usage

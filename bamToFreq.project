@@ -33,6 +33,8 @@
       </Compiler>
       <Linker Options="" Required="yes">
         <Library Value="libhts"/>
+        <Library Value="boost_filesystem"/>
+        <Library Value="boost_system"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
