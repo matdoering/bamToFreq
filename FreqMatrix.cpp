@@ -3,6 +3,7 @@
 #include <fstream>   
 #include <unordered_set>
 #include <algorithm>
+#include <cmath>
 
 size_t FreqMatrix::m_defaultNumberOfRows = 100000;
 map<string, string> FreqMatrix::m_nt2AA = create_nt2AAMap();
