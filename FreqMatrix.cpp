@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <cmath>
 
-size_t FreqMatrix::m_defaultNumberOfRows = 100000;
 map<string, string> FreqMatrix::m_nt2AA = create_nt2AAMap();
 
 string FreqMatrix::translate(string ntSeq) {
@@ -21,8 +20,8 @@ string FreqMatrix::translate(string ntSeq) {
 }
 
 
-FreqMatrix::FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder) :  
-        m_inputFname(string(samPath)), m_phredQualityCutoff(phredQualityCutoff), m_outFolder(outFolder)
+FreqMatrix::FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder, size_t nbrOfRows) :  
+        m_inputFname(string(samPath)), m_phredQualityCutoff(phredQualityCutoff), m_outFolder(outFolder), m_defaultNumberOfRows(nbrOfRows)
     {
 
 	// initialize read counts with zeros

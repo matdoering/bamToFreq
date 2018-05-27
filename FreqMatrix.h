@@ -19,7 +19,7 @@ private:
 	map<string, vector<int> > m_freqMatrix;
 	CodonData *m_codonMatrix = NULL;
 	vector<CodonData> m_codonFrames; // matrices for 1st, 2nd, and 3rd reading frame
-	static size_t m_defaultNumberOfRows; // viral genomes are small
+    size_t m_defaultNumberOfRows; // viral genomes are small
 	void addEvidence(int pos, string obs); // increment evidence at position 'pos' for observation 'obs'
 	void addEvidenceCodon(int pos, string obs, int readingFrame); // increment evidence at position 'pos' for observation 'obs'
 	void addEvidenceCodonInsertion(int pos, vector<string> &obs, int readingFrame);
@@ -29,7 +29,7 @@ private:
 	void initMatrix(map<string, vector<int> > &freqMatrix, vector<string>& header, vector<int>& readCounts, vector<int> &posVector);
 	int findReadingFrame(); // find the right reading frame for the codon matrix
 	string translate(string ntSeq);
-	static string getConsensus(CodonData& freqFile);
+    string getConsensus(CodonData& freqFile);
 	map<int, vector<string> > getCodons(vector<ReadData> &matches, int readingFrame);
 
 	static map<string, string> m_nt2AA;
@@ -226,7 +226,7 @@ public:
 	void storeInsertions(vector<ReadData> &insertions);
 	void writeCSV(map<string, vector<string> > &freqMatrix, string suffix);
 	void writeCSVs();
-	FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder);
+	FreqMatrix(char* samPath, int phredQualityCutoff, string outFolder, size_t numberOfRows);
 	template<typename T>
 	static void truncateMatrix(map<string, vector<T> > &freqMatrix, int minPos, int maxPos) {
 		if (maxPos == 0) { // nothing to truncate

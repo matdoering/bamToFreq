@@ -15,13 +15,14 @@ struct globalArgs_t {
     int phredQualCutoff;        /* -q option for phred quality cutoff*/
     string outFolder;           /* -o option for outFolder */
     bool buildCodonFile;      /* -c option to prevent codon file from being built*/
+    size_t nbrOfRows;           /* -n maximal genome size */
     char** inputFiles; /* array of input BAM files */
     int numInputFiles; /* number of input files in 'inputFiles' array */
 } globalArgs;
 
 
 void printUsage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [-q phredQualCutoff] [-o outFolder] [-c] file.bam\n", argv[0]);
+    fprintf(stderr, "Usage: %s [-q phredQualCutoff] [-o outFolder] [-n maxGenomePosition] [-c] file.bam\n", argv[0]);
 }
 int main(int argc, char *argv[]){
     if (argc == 1) {
@@ -31,12 +32,13 @@ int main(int argc, char *argv[]){
     
 
     // q: requires additional argument, o: as well, c,h,?: no args
-    static const char *optString = "q:o:ch?"; // determine which options are available (column indicates there's an argument)
+    static const char *optString = "q:o:n:ch?"; // determine which options are available (column indicates there's an argument)
     int opt = 0;
      
     /* Initialize globalArgs before we get to work. */
     globalArgs.phredQualCutoff = 30;
     globalArgs.outFolder = "";
+    globalArgs.nbrOfRows = 100000; // create matrices with 100,000 rows
     globalArgs.buildCodonFile = true;
     globalArgs.inputFiles = argv + 1; // first non-program-name argument
     globalArgs.numInputFiles = argc - 1; // expect that all args except the program name are bam files
@@ -54,6 +56,9 @@ int main(int argc, char *argv[]){
         boost::filesystem::create_directory(dir);
         break;
       }
+      case 'n':
+        globalArgs.nbrOfRows = atoi(optarg);
+        break;
       case 'c':
         globalArgs.buildCodonFile = false;
         break;
@@ -91,8 +96,7 @@ void processSamFile(char* samPath) {
 		return;
 	}
 	// init matrix with nucleotide counts
-	FreqMatrix *freqs = new FreqMatrix(samPath, globalArgs.phredQualCutoff, globalArgs.outFolder);
-	uint8_t qualCutoff = 30;
+	FreqMatrix *freqs = new FreqMatrix(samPath, globalArgs.phredQualCutoff, globalArgs.outFolder, globalArgs.nbrOfRows);
 	int readCount = 0;
     while(readFromSam(fp_in, bamHdr, aln, samPath) > 0){
 		readCount++;
@@ -100,7 +104,7 @@ void processSamFile(char* samPath) {
         //char *chr = bamHdr->target_name[aln->core.tid] ; // contig name (chromosome)
         uint32_t len = aln->core.l_qseq; // length of the read.
 		uint32_t readQuality = aln->core.qual ; //mapping quality
-		if (readQuality < qualCutoff) {
+		if (readQuality < globalArgs.phredQualCutoff) {
 			// ignore reads whose quality is not sufficient
 			continue;
 		}

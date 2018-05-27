@@ -14,7 +14,7 @@ CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=
 Date                   :=05/27/18
-CodeLitePath           :=
+CodeLitePath           :=/home/mdoering/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
 ObjectSuffix           :=.o
@@ -59,6 +59,7 @@ AS       := /usr/bin/as
 ##
 ## User defined environment variables
 ##
+CodeLiteDir:=/usr/share/codelite
 Objects0=$(IntermediateDirectory)/CodonData.cpp$(ObjectSuffix) $(IntermediateDirectory)/FreqMatrix.cpp$(ObjectSuffix) $(IntermediateDirectory)/bamReader.cpp$(ObjectSuffix) $(IntermediateDirectory)/ReadData.cpp$(ObjectSuffix) 
 
 
