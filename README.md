@@ -32,3 +32,5 @@ bamToFreq -h
 
 The Phred-scaled quality score that is used to select reads/nucleotides that are considered for frequency file generation, is determined via the ```-q``` argument. The generation of codon frequency files can be disabled with the ```-c``` argument. A different output folder can be specified with the ```-o``` argument.
 
+## License
+This code is subject to the terms of the Mozilla Public License, v. 2.0.
