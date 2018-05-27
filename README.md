@@ -6,13 +6,20 @@ The only requirements of bamToFreq are [htslib](https://github.com/samtools/htsl
 ```
 error while loading shared libraries: libhts.so.2: cannot open shared object file: No such file or directory
 ```
-Therefore, please ensure that you either have installed the requirements system-wide or that you have adjusted your ```LD_LIBRARY_PATH``` accordingly, for example in case that htslib is installed locally:
+Therefore, please ensure that you either have installed the requirements system-wide or that you have adjusted your ```LD_LIBRARY_PATH``` accordingly, for example in case that htslib is installed in a local folder:
 ```
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<pathToFolderContainingLibHts>
 ```
 
+## Installation
+If you fulfill the requirements for bamToFreq, you can simply run
+```
+./configure && make && sudo make install
+```
+If you do not have superuser privileges, you can also specify a local folder for installation using ```./configure --prefix <path_to_local_folder>```.
+
 ## Usage
-You can simply run bamToFreq via
+Once bamToFreq has been installed, you can run the tool via
 ```
 bamToFreq <bamFile>
 ```
