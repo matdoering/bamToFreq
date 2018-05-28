@@ -18,7 +18,7 @@ If you fulfill the requirements for bamToFreq, you can simply run
 ```
 If you do not have superuser privileges, you can also specify a local folder for installation using ```./configure --prefix <path_to_local_folder>```. If ```./configure``` should fail due to libraries that are missing from the system, you can provide the paths to the local libraries in this way
 ```
-export CPPFLAGS='-I<pathToFolderContainingHtsLib>/include' && export LDFLAGS='-L<pathToFolderContainingHtsLib>/lib>
+export CPPFLAGS='-I<pathToFolderContainingHtsLib>/include' && export LDFLAGS='-L<pathToFolderContainingHtsLib>/lib'
 ```
 and then call configure and make once again.
 
