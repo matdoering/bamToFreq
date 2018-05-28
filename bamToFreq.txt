@@ -1,1 +1,1 @@
-./Debug/CodonData.cpp.o ./Debug/FreqMatrix.cpp.o ./Debug/bamReader.cpp.o ./Debug/ReadData.cpp.o
+./Debug/bamReader.cpp.o ./Debug/FreqMatrix.cpp.o ./Debug/ReadData.cpp.o ./Debug/CodonData.cpp.o

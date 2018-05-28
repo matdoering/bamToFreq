@@ -1,5 +1,8 @@
 #include "CodonData.h"
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 CodonData::CodonData() {
 	

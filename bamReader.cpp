@@ -1,15 +1,15 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <htslib/sam.h> /// linker: libhts
 #include <iostream>
 #include "bamReader.h"
 #include "FreqMatrix.h"
-#include <stdlib.h>
 #include "ReadData.h"
 #include <unistd.h>
-#include <stdio.h>
 #include <boost/filesystem.hpp> // linker: -lboost_filesystem -lboost_system
+#include <string>
+
+using namespace std;
 
 struct globalArgs_t {
     int phredQualCutoff;        /* -q option for phred quality cutoff*/
