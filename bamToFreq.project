@@ -36,6 +36,14 @@
         <Library Value="libhts"/>
         <Library Value="boost_filesystem"/>
         <Library Value="boost_system"/>
+        <Library Value="z"/>
+        <Library Value="pthread"/>
+        <Library Value="lzma"/>
+        <Library Value="bz2"/>
+        <Library Value="curl"/>
+        <Library Value="dl"/>
+        <Library Value="ssl"/>
+        <Library Value="crypto"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="../examples/sample.bam" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>

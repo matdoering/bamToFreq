@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Matthias Doering
-Date                   :=28/05/18
+Date                   :=05/06/18
 CodeLitePath           :=/home/mdoering/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -39,8 +39,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)htslib/include/ 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)hts $(LibrarySwitch)boost_filesystem $(LibrarySwitch)boost_system 
-ArLibs                 :=  "libhts" "boost_filesystem" "boost_system" 
+Libs                   := $(LibrarySwitch)hts $(LibrarySwitch)boost_filesystem $(LibrarySwitch)boost_system $(LibrarySwitch)z $(LibrarySwitch)pthread $(LibrarySwitch)lzma $(LibrarySwitch)bz2 $(LibrarySwitch)curl $(LibrarySwitch)dl $(LibrarySwitch)ssl $(LibrarySwitch)crypto 
+ArLibs                 :=  "libhts" "boost_filesystem" "boost_system" "z" "pthread" "lzma" "bz2" "curl" "dl" "ssl" "crypto" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)htslib/lib 
 
 ##
