@@ -5,7 +5,17 @@ bamToFreq is a tool for converting mapped reads from next-generation sequencing 
 A statically-linked binary for 64 bit Linux systems [is available](bin/bamToFreq).
 
 ## Docker Container
-A Docker container for bamToFreq is available at [Docker Hub](https://hub.docker.com/r/mdoering88/bamtofreq/).
+A Docker container for bamToFreq is available at [Docker Hub](https://hub.docker.com/r/mdoering88/bamtofreq/). If you have Docker installed, you can simply run bamToFreq directly using 
+```
+docker run -v <bamFolder>:/data/ mdoering88/bamtofreq:latest /data/bamFile.bam
+
+```
+
+or via an interactive session
+```
+docker run -v <bamFolder>:/data/ -it mdoering88/bamtofreq:latest /bin/bash
+docker run -v <bamFolder>:/data/ -it --entrypoint /bin/bash mdoering88/bamtofreq:latest
+```
 
 ## Requirements of bamToFreq
 The only requirements of bamToFreq are [htslib](https://github.com/samtools/htslib) and boost. For example, if htslib has not been properly setup, bamToFreq will not work and output the following error:
