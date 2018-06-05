@@ -7,6 +7,7 @@
 #include "ReadData.h"
 #include <unistd.h>
 #define BOOST_NO_CXX11_SCOPED_ENUMS // error in linking with docker alpine image ..
+#undef BOOST_NO_CXX11_SCOPED_ENUMS // error in linking with docker alpine image ..
 #include <boost/filesystem.hpp> // linker: -lboost_filesystem -lboost_system
 #include <string>
 
