@@ -13,7 +13,6 @@ docker run -v <bamFolder>:/data/ mdoering88/bamtofreq:latest /data/bamFile.bam
 
 or via an interactive session
 ```
-docker run -v <bamFolder>:/data/ -it mdoering88/bamtofreq:latest /bin/bash
 docker run -v <bamFolder>:/data/ -it --entrypoint /bin/bash mdoering88/bamtofreq:latest
 ```
 
