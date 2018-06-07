@@ -17,7 +17,7 @@ docker run -v <bamFolder>:/data/ -it --entrypoint /bin/bash mdoering88/bamtofreq
 ```
 
 ## Requirements of bamToFreq
-The only requirements of bamToFreq are [htslib](https://github.com/samtools/htslib) and boost. For example, if htslib has not been properly setup, bamToFreq will not work and output the following error:
+The only requirements for using the compiled version of bamToFreq are [htslib](https://github.com/samtools/htslib) and boost. For example, if htslib has not been properly setup, bamToFreq will not work and output the following error:
 ```
 error while loading shared libraries: libhts.so.2: cannot open shared object file: No such file or directory
 ```
